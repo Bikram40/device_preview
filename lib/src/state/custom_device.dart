@@ -100,6 +100,9 @@ class CustomDeviceInfo implements DeviceInfo {
 
   @override
   final Size frameSize;
+
+  @override
+  CustomPainter get framePainter => const GenericPhoneFramePainter();
 }
 
 class CustomDeviceIdentifier implements DeviceIdentifier {

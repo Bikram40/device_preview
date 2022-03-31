@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:typed_data';
+import 'dart:ui' as ui;
 
 import 'package:device_frame/device_frame.dart';
 import 'package:device_preview/src/state/state.dart';
@@ -12,7 +13,6 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:provider/provider.dart';
-import 'dart:ui' as ui;
 
 import 'locales/default_locales.dart';
 import 'plugins/plugin.dart';
@@ -306,9 +306,9 @@ class DevicePreview extends StatefulWidget {
     );
 
     var mediaQuery = DeviceFrame.mediaQuery(
-      context,
-      device,
-      orientation,
+      orientation: orientation,
+      context: context,
+      info: device,
     );
 
     if (isVirtualKeyboardVisible) {
@@ -361,7 +361,7 @@ class _DevicePreviewState extends State<DevicePreview> {
 
   @override
   void didChangeDependencies() {
-    DeviceFrame.precache(context);
+    // DeviceFrame.precache(context);
     super.didChangeDependencies();
   }
 
@@ -431,7 +431,7 @@ class _DevicePreviewState extends State<DevicePreview> {
 
     return ChangeNotifierProvider(
       create: (context) => DevicePreviewStore(
-        defaultDevice: widget.defaultDevice ?? Devices.ios.iPhone11,
+        defaultDevice: widget.defaultDevice ?? Devices.ios.iPhone12,
         devices: widget.devices,
         locales: widget.availableLocales,
         storage: widget.storage,

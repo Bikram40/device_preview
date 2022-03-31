@@ -18,7 +18,7 @@ extension TargetPlatformFormatExtensions on TargetPlatform {
       case TargetPlatform.fuchsia:
         return FontAwesomeIcons.google;
       case TargetPlatform.macOS:
-        return FontAwesomeIcons.appleAlt;
+        return FontAwesomeIcons.appleWhole;
       case TargetPlatform.windows:
         return FontAwesomeIcons.windows;
       case TargetPlatform.linux:
