@@ -105,7 +105,6 @@ class DevicePreview extends StatefulWidget {
     DevicePreviewStorage? storage,
     this.enabled = true,
   })  : assert(devices == null || devices.isNotEmpty),
-        assert(isToolbarVisible != null),
         storage = storage ?? DevicePreviewStorage.preferences(),
         super(key: key);
 
@@ -117,7 +116,7 @@ class DevicePreview extends StatefulWidget {
   /// The current target platform for the currently selected device.
   static TargetPlatform platform(BuildContext context) {
     final platform = context.select(
-      (DevicePreviewStore store) => store.deviceInfo.identifier.platform,
+          (DevicePreviewStore store) => store.deviceInfo.identifier.platform,
     );
     return platform;
   }
@@ -226,10 +225,8 @@ class DevicePreview extends StatefulWidget {
 
   /// A global builder that should be inserted into [WidgetApp]'s builder
   /// to simulated the simulated device screen and platform properties.
-  static Widget appBuilder(
-    BuildContext context,
-    Widget? widget,
-  ) {
+  static Widget appBuilder(BuildContext context, Widget? widget,
+      {ThemeData? themeData}) {
     if (!_isEnabled(context)) {
       return widget!;
     }
@@ -243,26 +240,37 @@ class DevicePreview extends StatefulWidget {
     if (!isEnabled) return widget!;
 
     final identifier = context.select(
-      (DevicePreviewStore store) => store.deviceInfo.identifier,
+          (DevicePreviewStore store) => store.deviceInfo.identifier,
     );
 
     final isDarkMode = context.select(
-      (DevicePreviewStore store) => store.data.isDarkMode,
+          (DevicePreviewStore store) => store.data.isDarkMode,
     );
 
     return MediaQuery(
       data: _mediaQuery(context),
       child: Theme(
-        data: Theme.of(context).copyWith(
-          platform: identifier.platform,
-          visualDensity: [
-            DeviceType.desktop,
-            DeviceType.laptop,
-          ].contains(identifier.type)
-              ? VisualDensity.compact
-              : VisualDensity.comfortable,
-          brightness: isDarkMode ? Brightness.dark : Brightness.light,
-        ),
+        data: themeData == null
+            ? Theme.of(context).copyWith(
+                platform: identifier.platform,
+                visualDensity: [
+                  DeviceType.desktop,
+                  DeviceType.laptop,
+                ].contains(identifier.type)
+                    ? VisualDensity.compact
+                    : VisualDensity.comfortable,
+                brightness: isDarkMode ? Brightness.dark : Brightness.light,
+              )
+            : themeData.copyWith(
+                platform: identifier.platform,
+                visualDensity: [
+                  DeviceType.desktop,
+                  DeviceType.laptop,
+                ].contains(identifier.type)
+                    ? VisualDensity.compact
+                    : VisualDensity.comfortable,
+                brightness: isDarkMode ? Brightness.dark : Brightness.light,
+              ),
         child: widget!,
       ),
     );
@@ -270,39 +278,39 @@ class DevicePreview extends StatefulWidget {
 
   static MediaQueryData _mediaQuery(BuildContext context) {
     final device = context.select(
-      (DevicePreviewStore store) => store.deviceInfo,
+          (DevicePreviewStore store) => store.deviceInfo,
     );
 
     final orientation = context.select(
-      (DevicePreviewStore store) => store.data.orientation,
+          (DevicePreviewStore store) => store.data.orientation,
     );
 
     final isVirtualKeyboardVisible = context.select(
-      (DevicePreviewStore store) => store.data.isVirtualKeyboardVisible,
+          (DevicePreviewStore store) => store.data.isVirtualKeyboardVisible,
     );
 
     final isDarkMode = context.select(
-      (DevicePreviewStore store) => store.data.isDarkMode,
+          (DevicePreviewStore store) => store.data.isDarkMode,
     );
 
     final textScaleFactor = context.select(
-      (DevicePreviewStore store) => store.data.textScaleFactor,
+          (DevicePreviewStore store) => store.data.textScaleFactor,
     );
 
     final boldText = context.select(
-      (DevicePreviewStore store) => store.data.boldText,
+          (DevicePreviewStore store) => store.data.boldText,
     );
 
     final disableAnimations = context.select(
-      (DevicePreviewStore store) => store.data.disableAnimations,
+          (DevicePreviewStore store) => store.data.disableAnimations,
     );
 
     final accessibleNavigation = context.select(
-      (DevicePreviewStore store) => store.data.accessibleNavigation,
+          (DevicePreviewStore store) => store.data.accessibleNavigation,
     );
 
     final invertColors = context.select(
-      (DevicePreviewStore store) => store.data.invertColors,
+          (DevicePreviewStore store) => store.data.invertColors,
     );
 
     var mediaQuery = DeviceFrame.mediaQuery(
@@ -368,19 +376,19 @@ class _DevicePreviewState extends State<DevicePreview> {
   Widget _buildPreview(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final device = context.select(
-      (DevicePreviewStore store) => store.deviceInfo,
+          (DevicePreviewStore store) => store.deviceInfo,
     );
     final isFrameVisible = context.select(
-      (DevicePreviewStore store) => store.data.isFrameVisible,
+          (DevicePreviewStore store) => store.data.isFrameVisible,
     );
     final orientation = context.select(
-      (DevicePreviewStore store) => store.data.orientation,
+          (DevicePreviewStore store) => store.data.orientation,
     );
     final isVirtualKeyboardVisible = context.select(
-      (DevicePreviewStore store) => store.data.isVirtualKeyboardVisible,
+          (DevicePreviewStore store) => store.data.isVirtualKeyboardVisible,
     );
     final isDarkMode = context.select(
-      (DevicePreviewStore store) => store.data.isDarkMode,
+          (DevicePreviewStore store) => store.data.isDarkMode,
     );
 
     return Padding(
@@ -452,12 +460,12 @@ class _DevicePreviewState extends State<DevicePreview> {
         }
 
         final isEnabled = context.select(
-          (DevicePreviewStore store) => store.data.isEnabled,
+              (DevicePreviewStore store) => store.data.isEnabled,
         );
 
         final isToolbarVisible = widget.isToolbarVisible &&
             context.select(
-              (DevicePreviewStore store) => store.data.isToolbarVisible,
+                  (DevicePreviewStore store) => store.data.isToolbarVisible,
             );
 
         final style = widget.style ?? DevicePreviewTheme.of(context);
@@ -538,6 +546,7 @@ class _DevicePreviewState extends State<DevicePreview> {
 
 class _ToolsOverlay extends StatefulWidget {
   final DevicePreviewStyle style;
+
   const _ToolsOverlay({
     Key? key,
     required this.style,
@@ -555,7 +564,7 @@ class _ToolsOverlayState extends State<_ToolsOverlay> {
   void initState() {
     // Forcing rebuild to update absolute postion in `_overlayKey`
     WidgetsBinding.instance!.addPostFrameCallback(
-      (timeStamp) => setState(() {}),
+          (timeStamp) => setState(() {}),
     );
     super.initState();
   }
