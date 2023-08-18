@@ -7,7 +7,6 @@ import 'package:device_preview/src/views/tool_bar/menus/accessibility.dart';
 import 'package:device_preview/src/views/tool_bar/menus/style.dart';
 import 'package:device_preview/src/views/widgets/popover.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 import '../../../utilities/spacing.dart';
@@ -138,7 +137,6 @@ class PlatformSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final toolBarStyle = DevicePreviewTheme.of(context).toolBar;
-    final theme = Theme.of(context);
     final isCustomSelected = context.select(
       (DevicePreviewStore store) =>
           store.deviceInfo.identifier.toString() ==
@@ -167,7 +165,7 @@ class PlatformSelector extends StatelessWidget {
           Container(
             margin: EdgeInsets.symmetric(horizontal: 6),
             decoration: BoxDecoration(
-              color: theme.accentTextTheme.button!.color!.withOpacity(0.4),
+              // color: theme.buttonTheme.button.color!.withOpacity(0.4),
               borderRadius: BorderRadius.circular(3),
             ),
             width: 2,
